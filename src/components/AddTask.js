@@ -12,8 +12,9 @@ const AddTask = ({ onAdd }) => {
       alert("please add task")
       return
     }
-
-    onAdd({ text, day, reminder })
+    const id = Math.floor(Math.random() * 10000 + 1)
+    console.log(id)
+    onAdd({ id, text, day, reminder })
 
     setText("")
     setDay("")
