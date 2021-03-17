@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react"
+import Header from "./components/Header"
+import Tasks from "./components/Tasks"
+import AddTask from "./components/AddTask"
 
-function App() {
+const App = () => {
+  const [showTask, setShowTask] = useState(true)
+  const [tasks, setTasks] = useState([
+    {
+      id: 1,
+      text: "Doctors apointment",
+      day: "Feb 15th at 2:15pm",
+      reminder: true,
+    },
+    {
+      id: 2,
+      text: "Meeting",
+      day: "March 10th at 10:15am",
+      reminder: true,
+    },
+  ])
+
+  const addTask = (task) => {
+    const id = Math.floor(Math.random * 1000 + 1)
+    const newTask = { id, ...task }
+    setTasks([...tasks, newTask])
+  }
+
+  const DeleteTask = (id) => {
+    setTasks(tasks.filter((task) => task.id !== id))
+  }
+
+  const toggleReminder = (id) => {
+    setTasks(
+      tasks.map((task) => {
+        return task.id === id ? { ...task, reminder: !task.reminder } : task
+      }),
+    )
+  }
+  const toggleShowTask = () => {
+    setShowTask(!showTask)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='container'>
+      <Header showAdd={toggleShowTask} showTask={showTask} />
+      {showTask ? <AddTask onAdd={addTask} /> : ""}
+      {tasks.length > 0 ? (
+        <Tasks tasks={tasks} onDelete={DeleteTask} onToggle={toggleReminder} />
+      ) : (
+        <p> No tasks to show</p>
+      )}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
